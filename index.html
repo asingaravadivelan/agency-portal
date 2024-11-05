@@ -15,8 +15,11 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+            max-width: 900px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two columns */
+            grid-gap: 20px;
         }
         h2 {
             text-align: center;
@@ -25,15 +28,17 @@
         label {
             font-weight: bold;
             display: block;
-            margin-top: 10px;
         }
         input, textarea {
             width: 100%;
             padding: 10px;
-            margin: 5px 0 20px;
+            margin: 5px 0 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 16px;
+        }
+        textarea {
+            resize: vertical; /* Allows users to resize textarea vertically */
         }
         button {
             padding: 10px 20px;
@@ -58,20 +63,46 @@
             border-radius: 8px;
             margin-top: 20px;
             display: none; /* Hidden by default */
+            max-width: 900px; /* Align with form width */
+            margin-left: auto;
+            margin-right: auto;
         }
         .card.success {
             border-color: #4CAF50;
             color: #4CAF50;
         }
+
+        /* Ensure labels and inputs stack on smaller screens */
+        @media (max-width: 768px) {
+            form {
+                grid-template-columns: 1fr; /* Stacks the form fields in one column */
+            }
+        }
+
+        /* Ensure the buttons span the entire form width */
+        .button-container {
+            grid-column: span 1; /* Span buttons across both columns */
+            display: flex;
+            gap: 10px; /* Adds space between buttons */
+            /*justify-content: space-between; /* Align buttons horizontally */
+        }
+        .button-container button {
+            width: 30%; /* Set button width to 45% for smaller size */
+        }
     </style>
 </head>
 <body>
 
-    <h2>Rezoning Application Form</h2>
+    <h2>Planning Application</h2>
+     <!-- Success Message Card -->
+     <div id="successCard" class="card success">
+        <h3>Form Successfully Submitted!</h3>
+        <p>The application has been successfully submitted.</p>
+    </div>
 
     <form id="rezoningForm" onsubmit="return handleSubmit(event)">
         <label for="projectTitle">Project Title:</label>
-        <input type="text" id="projectTitle" name="projectTitle" required>
+        <input type="text" id="projectTitle" name="projectTitle" required size="10px">
 
         <label for="applicantName">Applicant Name:</label>
         <input type="text" id="applicantName" name="applicantName" required>
@@ -94,15 +125,15 @@
         <label for="totalAreaAffected">Total Area Affected (in sq.m):</label>
         <input type="number" id="totalAreaAffected" name="totalAreaAffected" required>
 
-        <button type="submit">Submit</button>
-        <button type="reset" onclick="handleClear()">Clear</button>
-    </form>
+        <!-- Empty space for the second column layout -->
+        <div></div> <!-- Empty div for layout purposes to balance the columns -->
 
-    <!-- Success Message Card -->
-    <div id="successCard" class="card success">
-        <h3>Form Successfully Submitted!</h3>
-        <p>Your rezoning application has been successfully submitted. Thank you!</p>
-    </div>
+        <!-- Buttons in a container to ensure they span across both columns -->
+        <div class="button-container">
+            <button type="reset" onclick="handleClear()">Clear</button>
+            <button type="submit" onclick="handleSubmit()">Submit</button>
+        </div>
+    </form>
 
     <script>
         // Handle form submission
@@ -116,7 +147,7 @@
             setTimeout(function() {
                 document.getElementById('rezoningForm').reset();
                 document.getElementById('successCard').style.display = 'none'; // Hide the success message after reset
-            }, 3000);
+            }, 2000);
         }
 
         // Handle clearing of the form
